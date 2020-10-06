@@ -26,6 +26,7 @@ public class VKBotBean {
     private GroupActor actor;
     private VkApiClient vk;
     private int ts;
+    //Нужно записывать в файл, чтобы не терять пропущенные сообщения
     private int maxMsgId = -1;
 
     @Autowired

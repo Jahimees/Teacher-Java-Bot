@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.*;
+
 /**
  * Данный контроллер необходим чисто для взаимодействия с ботом удаленно.
  */
@@ -20,33 +22,33 @@ public class ManipulationController {
     @Autowired
     VKBotManipulator vkBotManipulator;
 
-//    @GetMapping
-//    public String object() {
-//        try {
-//            Class.forName("org.h2.Driver").newInstance();
-//            Connection conn = DriverManager.getConnection("jdbc:h2:file:./data/demo", "sa", "password");
-//            PreparedStatement statement = conn.prepareStatement("Select * from billionaires");
-//            ResultSet resultSet = statement.executeQuery();
-//            String resultString = "";
-//            while (resultSet.next()) {
-//                String name = resultSet.getString(1);
-//                String surname = resultSet.getString(2);
-//                String career = resultSet.getString(3);
-//                resultString += name + "\n" + surname + "\n" + career + "\n\n";
-//            }
-//            return resultString;
-//        } catch (InstantiationException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//
-//        return "success";
-//    }
+    @GetMapping
+    public String object() {
+        try {
+            Class.forName("org.h2.Driver").newInstance();
+            Connection conn = DriverManager.getConnection("jdbc:h2:file:./data/demo", "sa", "password");
+            PreparedStatement statement = conn.prepareStatement("Select * from billionaires");
+            ResultSet resultSet = statement.executeQuery();
+            String resultString = "";
+            while (resultSet.next()) {
+                String name = resultSet.getString(1);
+                String surname = resultSet.getString(2);
+                String career = resultSet.getString(3);
+                resultString += name + "\n" + surname + "\n" + career + "\n\n";
+            }
+            return resultString;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return "success";
+    }
 
     //TODO Сделать запуск бота в отдельном потоке
     /**
