@@ -4,6 +4,9 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.queries.messages.MessagesGetLongPollHistoryQuery;
+import main.constant.MessageConstant;
+import main.vk.command.Command;
+import main.vk.command.CommandResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +53,14 @@ public class VKBotManipulator {
             }
             if (messageList.size() != 0) {
                 for (Message message : messageList) {
-                    vkBotBean.getVk().messages().send(vkBotBean.getActor(), message.getUserId()).message(sendMessage).execute();
+                    String commandName = message.getBody().split(" ")[0];
+                    Command command = CommandResolver.resolveCommand(commandName);
+                    if (command == null) {
+                        vkBotBean.getVk().messages().send(vkBotBean.getActor(), message.getUserId()).message(MessageConstant.UNKNOWN_COMMAND_MESSAGE).execute();
+                    } else {
+                        command.execute(vkBotBean, message);
+                    }
+
                     vkBotBean.setTs(vkBotBean.getVk().messages().getLongPollServer(vkBotBean.getActor()).execute().getTs());
                 }
 
