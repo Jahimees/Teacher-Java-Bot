@@ -3,13 +3,15 @@ package main.api;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import lombok.Data;
+import main.model.UserQueryExecutor;
+import main.model.entity.User;
 import main.vk.VKBotManipulator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.*;
+import java.util.List;
 
 /**
  * Данный контроллер необходим чисто для взаимодействия с ботом удаленно.
@@ -24,30 +26,25 @@ public class ManipulationController {
 
     @GetMapping
     public String object() {
-        try {
-            Class.forName("org.h2.Driver").newInstance();
-            Connection conn = DriverManager.getConnection("jdbc:h2:file:./data/demo", "sa", "password");
-            PreparedStatement statement = conn.prepareStatement("Select * from billionaires");
-            ResultSet resultSet = statement.executeQuery();
-            String resultString = "";
-            while (resultSet.next()) {
-                String name = resultSet.getString(1);
-                String surname = resultSet.getString(2);
-                String career = resultSet.getString(3);
-                resultString += name + "\n" + surname + "\n" + career + "\n\n";
-            }
-            return resultString;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        UserQueryExecutor userQueryExecutor = new UserQueryExecutor();
+//        String query1 = "INSERT INTO users (id, first_name, last_name, balance) values (?,?,?,?);";
 
-        return "success";
+//        HashMap<Integer, Object> params = new HashMap<>();
+//        params.put(1, 143);
+//        params.put(2, "Henkel");
+//        params.put(3, "Gavr");
+//        params.put(4, 100);
+//
+//        userQueryExecutor.executeNonQuery(query1, params);
+
+        userQueryExecutor = new UserQueryExecutor();
+
+        String query = "SELECT * FROM users";
+        List<User> userList = userQueryExecutor.executeQuery(query, null);
+        String result = !userList.isEmpty() ? userList.toString() : null;
+        result = result != null ? result : "Not found";
+
+        return result;
     }
 
     //TODO Сделать запуск бота в отдельном потоке

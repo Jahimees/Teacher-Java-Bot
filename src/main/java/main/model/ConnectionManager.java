@@ -1,6 +1,8 @@
 package main.model;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public final class ConnectionManager {
 
@@ -9,32 +11,27 @@ public final class ConnectionManager {
     private ConnectionManager() {}
 
     public static Connection getConnection() {
-        if (connection == null) {
-            try {
-                Class.forName("org.h2.Driver").newInstance();
-                connection = DriverManager.getConnection("jdbc:h2:file:./data/demo", "sa", "password");
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+        try {
+            if (connection == null || connection.isClosed()) {
+                try {
+                    Class.forName("org.h2.Driver").newInstance();
+                    connection = DriverManager.getConnection("jdbc:h2:file:./data/demo", "sa", "password");
+                } catch (InstantiationException | SQLException | ClassNotFoundException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
         return connection;
     }
 
-    public static ResultSet executeSimpleQuery(String query) {
-        Connection connection = getConnection();
-        ResultSet resultSet = null;
+    public static void closeConnection() {
         try {
-            PreparedStatement statement = connection.prepareStatement(query);
-             resultSet = statement.executeQuery();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            connection.close();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
-        return resultSet;
     }
+
 }
