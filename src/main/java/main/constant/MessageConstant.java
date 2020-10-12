@@ -8,4 +8,8 @@ public class MessageConstant {
             "~Помощь - выводит список команд\n" +
             "~Начать - регистрирует пользователя в системе и позволяет начать  играть\n" +
             "~Баланс - выводит текущий баланс баллов пользователей";
+    public static final String ALREADY_REGISTERED = ", извините, Вы уже зарегистрированы";
+    public static final String CURRENT_BALANCE = "Ваш текущий баланс баллов составляет ";
+    public static final String PLUS_BONUS_1 = "Вам начислено ";
+    public static final String PLUS_BONUS_2 = " бонусов за выполнение заданий!";
 }
