@@ -47,7 +47,6 @@ public class ManipulationController {
         return result;
     }
 
-    //TODO Сделать запуск бота в отдельном потоке
     /**
      * Запускает бота.
      * @return
@@ -55,15 +54,7 @@ public class ManipulationController {
     @GetMapping
     @RequestMapping("/start")
     public String start() {
-        try {
-            vkBotManipulator.start();
-        } catch (ClientException e) {
-            return e.toString();
-        } catch (ApiException e) {
-            return e.toString();
-        } catch (InterruptedException e) {
-            return e.toString();
-        }
+      vkBotManipulator.run();
         return "success start";
     }
 }
