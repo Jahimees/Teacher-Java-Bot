@@ -14,6 +14,11 @@ public enum CommandResolver {
         {
             this.command = new HelpCommand();
         }
+    },
+    BALANCE {
+        {
+            this.command = new BalanceCommand();
+        }
     };
 
     protected Command command;
@@ -27,6 +32,7 @@ public enum CommandResolver {
         commands = new HashMap<>();
         commands.put("начать", "START");
         commands.put("помощь", "HELP");
+        commands.put("баланс", "BALANCE");
     }
 
     public static HashMap<String, String> getAllCommands() {

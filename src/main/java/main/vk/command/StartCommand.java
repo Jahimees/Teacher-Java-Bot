@@ -4,12 +4,17 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
-import main.constant.MessageConstant;
-import main.constant.QueryConstant;
 import main.model.UserQueryExecutor;
+import main.model.entity.User;
 import main.vk.VKBotBean;
 
 import java.util.HashMap;
+import java.util.List;
+
+import static main.constant.MessageConstant.ALREADY_REGISTERED;
+import static main.constant.MessageConstant.SUCCESS_REGISTRATION;
+import static main.constant.QueryConstant.FIND_USER;
+import static main.constant.QueryConstant.INSERT_USER;
 
 public class StartCommand implements Command {
 
@@ -23,19 +28,36 @@ public class StartCommand implements Command {
                 .execute()
                 .get(0);
 
-        HashMap<Integer, Object> params = new HashMap<>();
-        params.put(1, message.getUserId().toString());
-        params.put(2, user.getFirstName());
-        params.put(3, user.getLastName());
+        boolean isUserExist = isUserExist(message.getUserId());
 
+        if (isUserExist) {
+            HashMap<Integer, Object> params = new HashMap<>();
+            params.put(1, message.getUserId().toString());
+            params.put(2, user.getFirstName());
+            params.put(3, user.getLastName());
+
+            UserQueryExecutor userQueryExecutor = new UserQueryExecutor();
+            userQueryExecutor.executeNonQuery(INSERT_USER, params);
+
+            vkBotBean.getVk()
+                    .messages()
+                    .send(vkBotBean.getActor(), message.getUserId())
+                    .message(user.getFirstName() + ALREADY_REGISTERED)
+                    .execute();
+        } else {
+            vkBotBean.getVk()
+                    .messages()
+                    .send(vkBotBean.getActor(), message.getUserId())
+                    .message(user.getFirstName() + SUCCESS_REGISTRATION)
+                    .execute();
+        }
+    }
+
+    private boolean isUserExist(Integer userId) {
         UserQueryExecutor userQueryExecutor = new UserQueryExecutor();
-        userQueryExecutor.executeNonQuery(QueryConstant.INSERT_USER, params);
-
-        vkBotBean.getVk()
-                .messages()
-                .send(vkBotBean.getActor(), message.getUserId())
-                .message(user.getFirstName() + MessageConstant.SUCCESS_REGISTRATION)
-                .execute();
-
+        HashMap<Integer, Object> params = new HashMap<>();
+        params.put(1, userId);
+        List<User> userList = userQueryExecutor.executeQuery(FIND_USER, params);
+        return !userList.isEmpty();
     }
 }
