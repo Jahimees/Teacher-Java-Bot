@@ -25,8 +25,12 @@ public class TaskQueryExecutor implements QueryExecutor<Task> {
         try {
             while (rs.next()) {
                 Task task = new Task();
-                task.setId(rs.getInt(ID));
+                task.setId(rs.getString(ID));
                 task.setIdUser(rs.getInt(ID_USER));
+                task.setDateCreated(rs.getDate(DATE_CREATED));
+                task.setDateEnd(rs.getDate(DATE_END));
+                task.setDateStart(rs.getDate(DATE_START));
+                task.setBonuses(rs.getInt(BONUSES));
                 task.setText(rs.getString(TEXT));
                 taskList.add(task);
             }

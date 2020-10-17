@@ -4,18 +4,23 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import lombok.Data;
 import main.constant.QueryConstant;
+import main.model.TaskQueryExecutor;
 import main.model.UserQueryExecutor;
+import main.model.entity.Task;
 import main.model.entity.User;
 import main.vk.VKBotBean;
 import main.vk.VKBotManipulator;
+import org.hibernate.id.GUIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import static main.constant.MessageConstant.PLUS_BONUS_1;
 import static main.constant.MessageConstant.PLUS_BONUS_2;
@@ -34,7 +39,8 @@ public class ManipulationController {
     VKBotBean vkBotBean;
 
     @GetMapping
-    public String object() {
+    @RequestMapping("/users")
+    public String allUsers() {
         UserQueryExecutor userQueryExecutor = new UserQueryExecutor();
 
         String query = "SELECT * FROM users";
@@ -54,6 +60,26 @@ public class ManipulationController {
     public String start() {
       vkBotManipulator.run();
         return "success start";
+    }
+
+    @GetMapping
+    @RequestMapping("/task")
+    public String addNewTask() {
+        HashMap<Integer, Object> params = new HashMap<>();
+        UUID uuid =  UUID.randomUUID();
+        String taskText = "СОРТИРОВКА\nСоздать метод, который будет сортировать указанный массив по возрастанию любым известным вам способом.";
+        params.put(1, uuid.toString());
+        params.put(2, taskText);
+        params.put(3, 15);
+        params.put(4, LocalDateTime.now());
+
+        TaskQueryExecutor taskQueryExecutor = new TaskQueryExecutor();
+        taskQueryExecutor.executeNonQuery(QueryConstant.INSERT_TASK, params);
+
+        taskQueryExecutor = new TaskQueryExecutor();
+        List<Task> tasks = taskQueryExecutor.executeQuery(QueryConstant.FIND_FREE_TASKS2, null);
+
+        return "Task " + uuid.toString() + " successfully created. Tasks: " + tasks.toString();
     }
 
     //FIX по факту post но мне лень в postman

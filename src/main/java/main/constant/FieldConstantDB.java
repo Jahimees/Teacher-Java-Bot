@@ -20,4 +20,8 @@ public class FieldConstantDB {
 
     //TASK
     public static final String TEXT = "text";
+    public static final String DATE_CREATED = "date_created";
+    public static final String DATE_START = "date_start";
+    public static final String DATE_END = "date_end";
+    public static final String BONUSES = "bonuses";
 }

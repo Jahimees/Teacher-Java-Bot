@@ -1,8 +1,7 @@
--- DROP TABLE IF EXISTS billionaires;
 -- DROP TABLE IF EXISTS users;
 -- DROP TABLE IF EXISTS boughtCourses;
 -- DROP TABLE IF EXISTS courses;
--- DROP TABLE IF EXISTS tasks;
+DROP TABLE IF EXISTS tasks;
 --
 -- CREATE TABLE users (
 --   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -24,8 +23,12 @@
 --   cost INT NOT NULL
 -- );
 --
--- CREATE TABLE tasks (
---   id INT AUTO_INCREMENT PRIMARY KEY,
---   text CLOB NOT NULL,
---   id_user INT DEFAULT NULL
--- );
+CREATE TABLE tasks (
+  id varchar(250) PRIMARY KEY,
+  text CLOB NOT NULL,
+  id_user INT DEFAULT NULL,
+  date_created DATE default NULL,
+  date_start DATE default NULL,
+  date_end DATE default NULL,
+  bonuses int default 0
+);
