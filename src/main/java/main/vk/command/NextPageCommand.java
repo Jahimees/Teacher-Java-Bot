@@ -1,13 +1,13 @@
 package main.vk.command;
 
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.messages.Message;
-import main.vk.VKBotBean;
+import main.vk.PaginationUtils;
 
-public class NextPageCommand implements Command {
+public class NextPageCommand extends TaskCommand {
+
     @Override
-    public void execute(VKBotBean vkBotBean, Message message) throws ClientException, ApiException {
-
+    protected void doSetCurrentPage(int userId) {
+        int currentPage = PaginationUtils.getUserCurrentPage(userId);
+        PaginationUtils.setUserCurrentPage(userId, currentPage + 1);
     }
+
 }
