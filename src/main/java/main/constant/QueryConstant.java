@@ -10,9 +10,13 @@ public class QueryConstant {
             + BALANCE + "=? WHERE " + ID + "=?;";
 
 
-    public static final String FIND_USER_TASKS = "SELECT * FROM tasks where " + ID_USER + "=?;";
-    public static final String FIND_FREE_TASKS = "SELECT * FROM tasks WHERE " + ID_USER + " IS NULL;";
-    public static final String FIND_FREE_TASKS2 = "SELECT * FROM tasks";
+    public static final String FIND_USER_TASKS = "SELECT * FROM tasks where " + ID_USER + "=? AND " + DATE_END + " IS NULL;";
+    public static final String FIND_FREE_TASKS = "SELECT * FROM tasks WHERE " + ID_USER + " IS NULL AND " + DATE_START + " IS NULL;";
+    public static final String FIND_ALL_TASKS = "SELECT * FROM tasks";
     public static final String INSERT_TASK = "INSERT INTO tasks (" + ID + ", " + TEXT + ", " + BONUSES + ", " + DATE_CREATED + ") " +
             "VALUES (?, ?, ?, ?)";
+    public static final String FIND_TASK_BY_ID = "SELECT * FROM tasks WHERE " + ID + "=?;";
+    public static final String UPDATE_TASK_OWNER = "UPDATE tasks SET " + ID_USER + "=?, " + DATE_START + "=? WHERE " + ID + "=?;";
+    public static final String FINISH_TASK = "UPDATE tasks SET " + DATE_END + "=? WHERE " + ID + "=?;";
+    public static final String TASKS_COUNT = "SELECT count(*) as task_count FROM tasks WHERE " + ID_USER + "=? AND " + DATE_END + " IS NULL;";
 }

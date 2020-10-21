@@ -3,6 +3,7 @@ package main.constant;
 public class FieldConstantDB {
     //COMMON
     public static final String ID = "id";
+    public static final String TASK_COUNT = "task_count";
 
     //USER
     public static final String FIRST_NAME = "first_name";

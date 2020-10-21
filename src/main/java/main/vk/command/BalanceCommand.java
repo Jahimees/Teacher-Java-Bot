@@ -9,6 +9,7 @@ import main.vk.VKBotBean;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static main.constant.MessageConstant.CURRENT_BALANCE;
 import static main.constant.QueryConstant.FIND_USER;
@@ -21,7 +22,7 @@ public class BalanceCommand implements Command {
     @Override
     public void execute(VKBotBean vkBotBean, Message message) throws ClientException, ApiException {
 
-        HashMap<Integer, Object> params = new HashMap<>();
+        Map<Integer, Object> params = new HashMap<>();
         params.put(1, message.getUserId());
 
         UserQueryExecutor userQueryExecutor = new UserQueryExecutor();

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static main.constant.FieldConstantDB.*;
 import static main.constant.QueryConstant.UPDATE_USER;
@@ -14,13 +15,13 @@ import static main.constant.QueryConstant.UPDATE_USER;
 public class UserQueryExecutor implements QueryExecutor<User> {
 
     @Override
-    public void executeNonQuery(String query, HashMap<Integer, Object> params) {
+    public void executeNonQuery(String query, Map<Integer, Object> params) {
         execute(query, params, true);
         ConnectionManager.closeConnection();
     }
 
     @Override
-    public List<User> executeQuery(String query, HashMap<Integer, Object> params) {
+    public List<User> executeQuery(String query, Map<Integer, Object> params) {
         List<User> userList = new ArrayList<>();
         ResultSet rs = execute(query, params, false);
         try {
@@ -40,7 +41,7 @@ public class UserQueryExecutor implements QueryExecutor<User> {
     }
 
     public void updateUser(User user) {
-        HashMap<Integer, Object> params = new HashMap<>();
+        Map<Integer, Object> params = new HashMap<>();
         params.put(1, user.getFirstName());
         params.put(2, user.getLastName());
         params.put(3, user.getBalance());

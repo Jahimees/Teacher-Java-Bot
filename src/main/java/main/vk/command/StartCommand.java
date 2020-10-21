@@ -10,6 +10,7 @@ import main.vk.VKBotBean;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static main.constant.MessageConstant.ALREADY_REGISTERED;
 import static main.constant.MessageConstant.SUCCESS_REGISTRATION;
@@ -31,7 +32,7 @@ public class StartCommand implements Command {
         boolean isUserExist = isUserExist(message.getUserId());
 
         if (isUserExist) {
-            HashMap<Integer, Object> params = new HashMap<>();
+            Map<Integer, Object> params = new HashMap<>();
             params.put(1, message.getUserId().toString());
             params.put(2, user.getFirstName());
             params.put(3, user.getLastName());
@@ -55,7 +56,7 @@ public class StartCommand implements Command {
 
     private boolean isUserExist(Integer userId) {
         UserQueryExecutor userQueryExecutor = new UserQueryExecutor();
-        HashMap<Integer, Object> params = new HashMap<>();
+        Map<Integer, Object> params = new HashMap<>();
         params.put(1, userId);
         List<User> userList = userQueryExecutor.executeQuery(FIND_USER, params);
         return !userList.isEmpty();

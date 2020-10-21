@@ -4,10 +4,11 @@ import main.model.entity.Task;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class PaginationUtils {
 
-    public static HashMap<Integer, Integer> currentPage = new HashMap<>();
+    public static Map<Integer, Integer> currentPage = new HashMap<>();
     public static final int COUNT_TASKS_ON_PAGE = 3;
 
     private PaginationUtils() {

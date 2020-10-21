@@ -5,21 +5,21 @@ import main.model.entity.Course;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static main.constant.FieldConstantDB.*;
 
 public class CourseQueryExecutor implements QueryExecutor<Course> {
 
     @Override
-    public void executeNonQuery(String query, HashMap<Integer, Object> params) {
+    public void executeNonQuery(String query, Map<Integer, Object> params) {
         execute(query, params, true);
         ConnectionManager.closeConnection();
     }
 
     @Override
-    public List<Course> executeQuery(String query, HashMap<Integer, Object> params) {
+    public List<Course> executeQuery(String query, Map<Integer, Object> params) {
         List<Course> courseList = new ArrayList<>();
         ResultSet rs = execute(query, params, false);
         try {

@@ -34,6 +34,26 @@ public enum CommandResolver {
         {
             this.command = new PreviousPageCommand();
         }
+    },
+    MY_TASKS {
+        {
+            this.command = new MyTaskCommand();
+        }
+    },
+    TAKE_TASK {
+        {
+            this.command = new TakeTaskCommand();
+        }
+    },
+    REVOKE_TASK {
+        {
+            this.command = new RevokeTaskCommand();
+        }
+    },
+    FINISH_TASK {
+        {
+            this.command = new FinishTaskCommand();
+        }
     };
 
     protected Command command;
@@ -51,6 +71,10 @@ public enum CommandResolver {
         commands.put("задания", "TASKS");
         commands.put("дальше", "NEXT");
         commands.put("назад", "PREVIOUS");
+        commands.put("мои_задания", "MY_TASKS");
+        commands.put("взять_задание", "TAKE_TASK");
+        commands.put("отменить_задание", "REVOKE_TASK");
+        commands.put("закончить_задание", "FINISH_TASK");
     }
 
     public static HashMap<String, String> getAllCommands() {

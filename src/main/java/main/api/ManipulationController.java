@@ -10,7 +10,6 @@ import main.model.entity.Task;
 import main.model.entity.User;
 import main.vk.VKBotBean;
 import main.vk.VKBotManipulator;
-import org.hibernate.id.GUIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static main.constant.MessageConstant.PLUS_BONUS_1;
@@ -63,9 +63,9 @@ public class ManipulationController {
     }
 
     @GetMapping
-    @RequestMapping("/task")
+    @RequestMapping("/create_task")
     public String addNewTask() {
-        HashMap<Integer, Object> params = new HashMap<>();
+        Map<Integer, Object> params = new HashMap<>();
         UUID uuid =  UUID.randomUUID();
         String taskText = "СОРТИРОВКА\nСоздать метод, который будет сортировать указанный массив по возрастанию любым известным вам способом.";
         params.put(1, uuid.toString());
@@ -76,17 +76,27 @@ public class ManipulationController {
         TaskQueryExecutor taskQueryExecutor = new TaskQueryExecutor();
         taskQueryExecutor.executeNonQuery(QueryConstant.INSERT_TASK, params);
 
-        taskQueryExecutor = new TaskQueryExecutor();
-        List<Task> tasks = taskQueryExecutor.executeQuery(QueryConstant.FIND_FREE_TASKS2, null);
+        List<Task> tasks = taskQueryExecutor.executeQuery(QueryConstant.FIND_ALL_TASKS, null);
 
         return "Task " + uuid.toString() + " successfully created. Tasks: " + tasks.toString();
+    }
+
+    @GetMapping
+    @RequestMapping("/task")
+    public String getAllTasks() {
+
+        TaskQueryExecutor taskQueryExecutor = new TaskQueryExecutor();
+
+        List<Task> tasks = taskQueryExecutor.executeQuery(QueryConstant.FIND_ALL_TASKS, null);
+
+        return tasks.toString();
     }
 
     //FIX по факту post но мне лень в postman
     @GetMapping
     @RequestMapping("/bonus/{userId}/{plusBonusCount}")
     public String payBonus(@PathVariable Integer userId, @PathVariable Integer plusBonusCount) throws ClientException, ApiException {
-        HashMap<Integer, Object> params = new HashMap<>();
+        Map<Integer, Object> params = new HashMap<>();
         params.put(1, userId);
 
         UserQueryExecutor userQueryExecutor = new UserQueryExecutor();
