@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import static main.constant.MessageConstant.PLUS_BONUS_1;
 import static main.constant.MessageConstant.PLUS_BONUS_2;
+import static main.constant.QueryConstant.DROP_USER;
 
 /**
  * Данный контроллер необходим чисто для взаимодействия с ботом удаленно.
@@ -119,5 +120,17 @@ public class ManipulationController {
 
         return "User " + user.getFirstName() + " " + user.getLastName() + " get's " + plusBonusCount + " bonuses\n" +
                 "Now he has " + user.getBalance() + " bonuses";
+    }
+
+    @GetMapping
+    @RequestMapping("/dropUser/{userId}")
+    public static String dropUser(@PathVariable Integer userId) {
+        Map<Integer, Object> params = new HashMap<>();
+        params.put(1, userId);
+
+        UserQueryExecutor userQueryExecutor = new UserQueryExecutor();
+        userQueryExecutor.executeNonQuery(DROP_USER, params);
+
+        return "User successfully deleted";
     }
 }

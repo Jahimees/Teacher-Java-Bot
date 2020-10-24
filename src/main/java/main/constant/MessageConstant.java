@@ -27,4 +27,5 @@ public class MessageConstant {
     public static final String INPUT_TASK_ID = "Вы не указали id задания. Пожалуйста введите команду подобным образом: 'взять/закончить/отменить_задание id_задания'";
     public static final String TOO_MUCH_TASKS = "Вы не можете иметь более 2-х активных заданий одновременно";
     public static final String NO_TASKS = "На бирже сейчас нет заданий :(";
+    public static final String NOT_REGISTERED = "Извините, вы не зарегистрированы. Введите команду 'Начать', чтобы зарегистрироваться";
 }

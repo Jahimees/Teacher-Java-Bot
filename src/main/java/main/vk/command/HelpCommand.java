@@ -6,7 +6,7 @@ import com.vk.api.sdk.objects.messages.Message;
 import main.constant.MessageConstant;
 import main.vk.VKBotBean;
 
-public class HelpCommand implements Command {
+public class HelpCommand implements UnregisteredCommand {
 
     @Override
     public void execute(VKBotBean vkBotBean, Message message) throws ClientException, ApiException {

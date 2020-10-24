@@ -8,6 +8,7 @@ public class QueryConstant {
     public static final String FIND_USER = "SELECT * FROM USERS WHERE " + ID + "=?;";
     public static final String UPDATE_USER = "UPDATE USERS SET " + FIRST_NAME + "=?, " + LAST_NAME + "=?, "
             + BALANCE + "=? WHERE " + ID + "=?;";
+    public static final String DROP_USER = "DELETE FROM USERS WHERE " + ID + "=?;";
 
 
     public static final String FIND_USER_TASKS = "SELECT * FROM tasks where " + ID_USER + "=? AND " + DATE_END + " IS NULL;";

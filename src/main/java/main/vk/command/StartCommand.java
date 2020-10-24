@@ -17,7 +17,7 @@ import static main.constant.MessageConstant.SUCCESS_REGISTRATION;
 import static main.constant.QueryConstant.FIND_USER;
 import static main.constant.QueryConstant.INSERT_USER;
 
-public class StartCommand implements Command {
+public class StartCommand implements UnregisteredCommand {
 
     @Override
     public void execute(VKBotBean vkBotBean, Message message) throws ClientException, ApiException {
@@ -31,7 +31,7 @@ public class StartCommand implements Command {
 
         boolean isUserExist = isUserExist(message.getUserId());
 
-        if (isUserExist) {
+        if (!isUserExist) {
             Map<Integer, Object> params = new HashMap<>();
             params.put(1, message.getUserId().toString());
             params.put(2, user.getFirstName());
@@ -43,13 +43,14 @@ public class StartCommand implements Command {
             vkBotBean.getVk()
                     .messages()
                     .send(vkBotBean.getActor(), message.getUserId())
-                    .message(user.getFirstName() + ALREADY_REGISTERED)
+                    .message(user.getFirstName() + SUCCESS_REGISTRATION)
                     .execute();
         } else {
+
             vkBotBean.getVk()
                     .messages()
                     .send(vkBotBean.getActor(), message.getUserId())
-                    .message(user.getFirstName() + SUCCESS_REGISTRATION)
+                    .message(user.getFirstName() + ALREADY_REGISTERED)
                     .execute();
         }
     }
