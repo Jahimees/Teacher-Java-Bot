@@ -43,7 +43,7 @@ public class MyTaskCommand implements Command {
             message.append("ID: ").append(task.getId()).append("\n")
                 .append("Задача: ").append(task.getText()).append("\n")
                 .append("Награда: ").append(task.getBonuses()).append("\n")
-                .append("Взята в работу: ").append(task.getDateStart()).append("\n_____________________________");
+                .append("Взята в работу: ").append(task.getDateStart()).append("\n______________________");
         }
 
         message.append("\n\nЧтобы отменить задание, введите 'отменить_задание id_задания'");

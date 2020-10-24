@@ -48,7 +48,7 @@ public class TaskCommand implements Command {
             builder.append("\nId задания: ").append(taskList.get(i).getId())
                     .append("\n Задание: ").append(taskList.get(i).getText())
                     .append("\n Бонусов за задание: ").append(taskList.get(i).getBonuses())
-                    .append("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                    .append("\n~~~~~~~~~~~~~~~~~~~~~~~~\n");
         }
         builder.append("\nЧтобы перейти к следующей странице введите команду 'Дальше'. Чтобы вернуться, введите 'Назад'");
         builder.append("\nЧтобы взять задание в работу, введите 'взять_задание id_задания'");
