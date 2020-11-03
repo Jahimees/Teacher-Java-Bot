@@ -40,7 +40,7 @@ public class RevokeTaskCommand extends TakeTaskCommand {
     }
 
     @Override
-    protected String validateTaskId(String taskId, int currentUserId) {
+    public String validateEntityId(String taskId, int currentUserId) {
         List<Task> task = findTask(taskId);
 
         if (task == null || task.size() <= 0) {

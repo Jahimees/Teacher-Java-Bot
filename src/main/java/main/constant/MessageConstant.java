@@ -5,12 +5,18 @@ public class MessageConstant {
     public static final String UNKNOWN_COMMAND_MESSAGE = "Такой команды не существует. Воспользуйтесь командой 'Помощь' для получения списка доступных команд";
     public static final String SUCCESS_REGISTRATION = ", Вы успешно зарегистрированы на бирже фриланса 'Непутевый программист'!";
     public static final String HELP_COMMAND_LIST = "Список команд:\n\n" +
+            "===ОБЩЕЕ===\n" +
             "= Помощь - выводит список команд\n" +
             "= Начать - регистрирует пользователя в системе и позволяет начать  играть\n" +
-            "= Баланс - выводит текущий баланс баллов пользователей\n" +
+            "= Баланс - выводит текущий баланс баллов пользователя\n\n" +
+            "===ЗАДАНИЯ===\n" +
             "= Задания - выводит список всех доступных заданий\n" +
             "= Мои_задания - выводит список ваших текущих задания\n" +
-            "= Взять/отменить/закончить_задание id_задания - берет в работу, отменяет и завершает задание по id соответственно";
+            "= Взять/отменить/закончить_задание id_задания - берет в работу, отменяет и завершает задание по id соответственно\n\n" +
+            "===КУРСЫ===\n" +
+            "= Курсы - выводит список доступых для покупки курсов\n" +
+            "= Купить_курс id_курса - покупка курса (если хватает бонусов)\n" +
+            "= Мои_курсы - выводит список приобретенных курсов";
     public static final String ALREADY_REGISTERED = ", извините, Вы уже зарегистрированы";
     public static final String CURRENT_BALANCE = "Ваш текущий баланс баллов составляет ";
     public static final String PLUS_BONUS_1 = "Вам начислено ";
@@ -24,8 +30,15 @@ public class MessageConstant {
     public static final String TASK_REVOKED = " успешно удалена из вашего списка задач";
     public static final String TASK_FINISHED = " успешно завершена";
     public static final String HAS_NOT_ACTIVE_TASKS = "У вас сейчас нет активных задач";
-    public static final String INPUT_TASK_ID = "Вы не указали id задания. Пожалуйста введите команду подобным образом: 'взять/закончить/отменить_задание id_задания'";
+    public static final String INPUT_ID = "Вы не указали id. Пожалуйста введите команду подобным образом: 'указываемая_команда id'";
     public static final String TOO_MUCH_TASKS = "Вы не можете иметь более 2-х активных заданий одновременно";
     public static final String NO_TASKS = "На бирже сейчас нет заданий :(";
     public static final String NOT_REGISTERED = "Извините, вы не зарегистрированы. Введите команду 'Начать', чтобы зарегистрироваться";
+    public static final String UNDEFINED_ENTITY_PAGINATION = "Прежде, чем листать страницы, нужно открыть книгу. Введите 'Задания' или 'Курсы'";
+    public static final String NO_COURSES = "Сейчас нет доступных курсов :(";
+    public static final String COURSE_ALREADY_BOUGHT = "Указанный курс уже приобретен";
+    public static final String NOT_ENOUGH_BONUSES = "Недостаточно средств для приобретения курса";
+    public static final String COURSE_WITH_NUMBER = "Курс под номером ";
+    public static final String SUCCESSFULLY_BOUGHT = " успешно приобретен";
+    public static final String NO_ONE_BOUGHT_COURSE = "У Вас пока нет приобретенных курсов :(";
 }

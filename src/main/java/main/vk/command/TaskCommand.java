@@ -14,7 +14,9 @@ import static main.constant.MessageConstant.NO_TASKS;
 import static main.constant.QueryConstant.FIND_FREE_TASKS;
 import static main.vk.PaginationUtils.*;
 
-public class TaskCommand implements Command {
+public class TaskCommand implements PaginableCommand {
+
+    private static int pageCount = 0;
 
     @Override
     public void execute(VKBotBean vkBotBean, Message message) throws ClientException, ApiException {
@@ -22,9 +24,13 @@ public class TaskCommand implements Command {
 
         List<Task> taskList = taskQueryExecutor.executeQuery(FIND_FREE_TASKS, null);
 
-        doSetCurrentPage(message.getUserId());
+        PaginationUtils.currentEntity = "Task";
 
-        String messageStr = taskList.size() == 0 ? NO_TASKS : buildMessageFromTaskList(taskList, getUserCurrentPage(message.getUserId()));
+        String messageStr = taskList.size() == 0 ? NO_TASKS : buildMessageFromTaskList(taskList, getUserCurrentTaskPage(message.getUserId()));
+
+        if (getUserCurrentTaskPage(message.getUserId()) == 0) {
+            doSetCurrentPage(message.getUserId());
+        }
 
         vkBotBean.getVk()
                 .messages()
@@ -35,16 +41,16 @@ public class TaskCommand implements Command {
 
     protected String buildMessageFromTaskList(List<Task> taskList, int nextPage) {
         StringBuilder builder = new StringBuilder("Вот доступные задания:\n\n");
-        int pageCount = calculatePageCount(taskList);
+        pageCount = calculatePageCount(taskList);
 
         nextPage = Math.min(nextPage, pageCount);
         nextPage = nextPage <= 0 ? 1 : nextPage;
 
         builder.append("\nСтраница ").append(nextPage).append(" из ").append(pageCount == 0 ? 1 : pageCount);
 
-        int until = Math.min((nextPage - 1) * COUNT_TASKS_ON_PAGE + COUNT_TASKS_ON_PAGE, taskList.size());
+        int until = Math.min((nextPage - 1) * COUNT_ENTITIES_ON_PAGE + COUNT_ENTITIES_ON_PAGE, taskList.size());
 
-        for (int i = (nextPage - 1) * COUNT_TASKS_ON_PAGE; i < until; i++) {
+        for (int i = (nextPage - 1) * COUNT_ENTITIES_ON_PAGE; i < until; i++) {
             builder.append("\nId задания: ").append(taskList.get(i).getId())
                     .append("\n Задание: ").append(taskList.get(i).getText())
                     .append("\n Бонусов за задание: ").append(taskList.get(i).getBonuses())
@@ -56,8 +62,16 @@ public class TaskCommand implements Command {
         return builder.toString();
     }
 
-    protected void doSetCurrentPage(int userId) {
-        PaginationUtils.setUserCurrentPage(userId, 1);
+    @Override
+    public void doSetCurrentPage(int userId) {
+        PaginationUtils.setUserCurrentTaskPage(userId, 1);
     }
 
+    public static int getPageCount() {
+        return pageCount;
+    }
+
+    public static void setPageCount(int pageCount) {
+        TaskCommand.pageCount = pageCount;
+    }
 }

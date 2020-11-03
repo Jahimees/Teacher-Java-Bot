@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static main.constant.FieldConstantDB.*;
+import static main.constant.QueryConstant.FIND_USER;
 import static main.constant.QueryConstant.UPDATE_USER;
 
 public class UserQueryExecutor implements QueryExecutor<User> {
@@ -38,6 +39,13 @@ public class UserQueryExecutor implements QueryExecutor<User> {
         }
         ConnectionManager.closeConnection();
         return userList;
+    }
+
+    public User findUser(int userId) {
+        Map<Integer, Object> params = new HashMap<>();
+        params.put(1, userId);
+
+        return executeQuery(FIND_USER, params).get(0);
     }
 
     public void updateUser(User user) {

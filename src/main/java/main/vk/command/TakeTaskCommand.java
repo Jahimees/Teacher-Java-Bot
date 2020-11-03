@@ -21,7 +21,7 @@ import static main.constant.MessageConstant.*;
 import static main.constant.QueryConstant.FIND_TASK_BY_ID;
 import static main.constant.QueryConstant.UPDATE_TASK_OWNER;
 
-public class TakeTaskCommand implements Command {
+public class TakeTaskCommand implements ParametrizedCommand {
 
     @Override
     public void execute(VKBotBean vkBotBean, Message message) throws ClientException, ApiException {
@@ -55,7 +55,8 @@ public class TakeTaskCommand implements Command {
                 .execute();
     }
 
-    protected String validateTaskId(String taskId, int currentUserId) {
+    @Override
+    public String validateEntityId(String taskId, int currentUserId) {
 
         List<Task> task = findTask(taskId);
 
@@ -81,28 +82,6 @@ public class TakeTaskCommand implements Command {
         TaskQueryExecutor queryExecutor = new TaskQueryExecutor();
 
         return queryExecutor.executeQuery(FIND_TASK_BY_ID, params);
-    }
-
-    protected boolean isValidMessage(VKBotBean vkBotBean, Message message) throws ClientException, ApiException {
-        if (message.getBody().split(" ").length != 2) {
-            vkBotBean.getVk().messages().send(vkBotBean.getActor(), message.getUserId()).message(INPUT_TASK_ID).execute();
-            return false;
-        }
-        String taskId = message.getBody().split(" ")[1];
-
-        String errorString = validateTaskId(taskId, message.getUserId());
-
-        if (!errorString.equals("")) {
-
-            vkBotBean.getVk()
-                    .messages()
-                    .send(vkBotBean.getActor(), message.getUserId())
-                    .message(errorString)
-                    .execute();
-            return false;
-        }
-
-        return true;
     }
 
     private int countUserTasks(Message message) {

@@ -54,6 +54,21 @@ public enum CommandResolver {
         {
             this.command = new FinishTaskCommand();
         }
+    },
+    COURSES {
+        {
+            this.command = new CoursesCommand();
+        }
+    },
+    BUY_COURSE {
+        {
+            this.command = new BuyCourseCommand();
+        }
+    },
+    MY_COURSES {
+        {
+            this.command = new MyCoursesCommand();
+        }
     };
 
     protected Command command;
@@ -75,6 +90,9 @@ public enum CommandResolver {
         commands.put("взять_задание", "TAKE_TASK");
         commands.put("отменить_задание", "REVOKE_TASK");
         commands.put("закончить_задание", "FINISH_TASK");
+        commands.put("курсы", "COURSES");
+        commands.put("купить_курс", "BUY_COURSE");
+        commands.put("мои_курсы", "MY_COURSES");
     }
 
     public static HashMap<String, String> getAllCommands() {

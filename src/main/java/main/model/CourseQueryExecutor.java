@@ -25,7 +25,7 @@ public class CourseQueryExecutor implements QueryExecutor<Course> {
         try {
             while (rs.next()) {
                 Course course = new Course();
-                course.setId(rs.getInt(ID));
+                course.setId(rs.getString(ID));
                 course.setLink(rs.getString(LINK));
                 course.setCost(rs.getInt(COST));
                 course.setName(rs.getString(NAME));

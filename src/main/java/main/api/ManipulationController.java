@@ -4,8 +4,10 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import lombok.Data;
 import main.constant.QueryConstant;
+import main.model.CourseQueryExecutor;
 import main.model.TaskQueryExecutor;
 import main.model.UserQueryExecutor;
+import main.model.entity.Course;
 import main.model.entity.Task;
 import main.model.entity.User;
 import main.vk.VKBotBean;
@@ -24,7 +26,7 @@ import java.util.UUID;
 
 import static main.constant.MessageConstant.PLUS_BONUS_1;
 import static main.constant.MessageConstant.PLUS_BONUS_2;
-import static main.constant.QueryConstant.DROP_USER;
+import static main.constant.QueryConstant.*;
 
 /**
  * Данный контроллер необходим чисто для взаимодействия с ботом удаленно.
@@ -97,16 +99,9 @@ public class ManipulationController {
     @GetMapping
     @RequestMapping("/bonus/{userId}/{plusBonusCount}")
     public String payBonus(@PathVariable Integer userId, @PathVariable Integer plusBonusCount) throws ClientException, ApiException {
-        Map<Integer, Object> params = new HashMap<>();
-        params.put(1, userId);
-
         UserQueryExecutor userQueryExecutor = new UserQueryExecutor();
-        List<User> userList = userQueryExecutor.executeQuery(QueryConstant.FIND_USER, params);
+        User user = userQueryExecutor.findUser(userId);
 
-        if (userList.isEmpty()) {
-            return "Can't find user with id " + userId;
-        }
-        User user = userList.get(0);
         user.setBalance(user.getBalance() + plusBonusCount);
 
         userQueryExecutor = new UserQueryExecutor();
@@ -132,5 +127,30 @@ public class ManipulationController {
         userQueryExecutor.executeNonQuery(DROP_USER, params);
 
         return "User successfully deleted";
+    }
+
+    @GetMapping
+    @RequestMapping("/addCourse/{id}/{link}/{name}/{cost}")
+    public static String addCourse(@PathVariable String id, @PathVariable String link,
+                                   @PathVariable String name, @PathVariable int cost) {
+        Map<Integer, Object> params = new HashMap<>();
+        params.put(1, id);
+        params.put(2, name);
+        params.put(3, link);
+        params.put(4, cost);
+
+        CourseQueryExecutor courseQueryExecutor = new CourseQueryExecutor();
+        courseQueryExecutor.executeNonQuery(ADD_NEW_COURSE, params);
+
+        return "Course successfully added";
+    }
+
+    @GetMapping
+    @RequestMapping("/courses")
+    public static String getCourses() {
+        CourseQueryExecutor courseQueryExecutor = new CourseQueryExecutor();
+        List<Course> courses = courseQueryExecutor.executeQuery(FIND_ALL_COURCES, null);
+
+        return courses.toString();
     }
 }
