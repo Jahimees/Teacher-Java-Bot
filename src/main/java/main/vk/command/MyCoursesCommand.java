@@ -10,6 +10,7 @@ import main.model.entity.BoughtCourse;
 import main.model.entity.Course;
 import main.vk.PaginationUtils;
 import main.vk.VKBotBean;
+import main.vk.command.core.PaginableCommand;
 
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +69,7 @@ public class MyCoursesCommand implements PaginableCommand {
         for (int i = (nextPage - 1) * COUNT_ENTITIES_ON_PAGE; i < until; i++) {
             builder.append("\nId курса: ").append(courses.get(i).getId())
                     .append("\nИмя курса: ").append(courses.get(i).getName())
-                    .append("\nСсылка на курс (допилить): ").append(courses.get(i).getLink())
+                    .append("\nСсылка на курс: ").append(courses.get(i).getLink())
                     .append("\nСтоимость курса: ").append(courses.get(i).getCost())
                     .append("\n~~~~~~~~~~~~~~~~~~~~~~~~\n");
         }

@@ -5,6 +5,7 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Message;
 import main.constant.MessageConstant;
 import main.vk.VKBotBean;
+import main.vk.command.core.UnregisteredCommand;
 
 public class HelpCommand implements UnregisteredCommand {
 

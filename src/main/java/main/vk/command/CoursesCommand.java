@@ -8,6 +8,7 @@ import main.model.CourseQueryExecutor;
 import main.model.entity.Course;
 import main.vk.PaginationUtils;
 import main.vk.VKBotBean;
+import main.vk.command.core.PaginableCommand;
 
 import java.util.List;
 

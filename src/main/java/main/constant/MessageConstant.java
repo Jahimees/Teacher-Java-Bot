@@ -41,4 +41,13 @@ public class MessageConstant {
     public static final String COURSE_WITH_NUMBER = "Курс под номером ";
     public static final String SUCCESSFULLY_BOUGHT = " успешно приобретен";
     public static final String NO_ONE_BOUGHT_COURSE = "У Вас пока нет приобретенных курсов :(";
+
+    //ADMIN
+    public static final String NOT_ADMIN = "HEY BRO, NICE DICK, BUT YOU ARE NOT ADMIN";
+    public static final String INVALID_ARGUMENTS = "INVALID ARGUMENTS";
+    public static final String TASK_CREATED = "Задача успешно создана";
+    public static final String ERROR = "ERROR CHECK STACK_TRACE";
+    public static final String FOR_USER = "Пользователю ";
+    public static final String PAYED_BONUSES = " было передано бонусов в размере ";
+    public static final String COURSE_CREATED = "Курс успешно создан";
 }

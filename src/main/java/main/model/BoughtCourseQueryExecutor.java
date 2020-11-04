@@ -26,7 +26,7 @@ public class BoughtCourseQueryExecutor implements QueryExecutor<BoughtCourse> {
             while (rs.next()) {
                 BoughtCourse course = new BoughtCourse();
                 course.setId(rs.getInt(ID));
-                course.setIdCourse(rs.getInt(ID_COURSE));
+                course.setIdCourse(rs.getString(ID_COURSE));
                 course.setIdUser(rs.getInt(ID_USER));
                 courseList.add(course);
             }

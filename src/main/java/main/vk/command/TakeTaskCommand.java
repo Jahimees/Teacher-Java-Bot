@@ -8,6 +8,7 @@ import main.constant.QueryConstant;
 import main.model.TaskQueryExecutor;
 import main.model.entity.Task;
 import main.vk.VKBotBean;
+import main.vk.command.core.ParametrizedCommand;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

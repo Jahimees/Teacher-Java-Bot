@@ -5,6 +5,7 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Message;
 import main.vk.PaginationUtils;
 import main.vk.VKBotBean;
+import main.vk.command.core.PaginableCommand;
 
 import static main.constant.MessageConstant.UNDEFINED_ENTITY_PAGINATION;
 

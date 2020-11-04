@@ -7,6 +7,7 @@ import com.vk.api.sdk.objects.users.UserXtrCounters;
 import main.model.UserQueryExecutor;
 import main.model.entity.User;
 import main.vk.VKBotBean;
+import main.vk.command.core.UnregisteredCommand;
 
 import java.util.HashMap;
 import java.util.List;

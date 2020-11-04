@@ -1,4 +1,9 @@
-package main.vk.command;
+package main.vk.command.core;
+
+import main.vk.command.*;
+import main.vk.command.admin.CreateNewCourseCommand;
+import main.vk.command.admin.CreateNewTaskCommand;
+import main.vk.command.admin.PayBonusesCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +74,21 @@ public enum CommandResolver {
         {
             this.command = new MyCoursesCommand();
         }
+    },
+    NEW_TASK {
+        {
+            this.command = new CreateNewTaskCommand();
+        }
+    },
+    PAY_BONUSES {
+        {
+            this.command = new PayBonusesCommand();
+        }
+    },
+    NEW_COURSE {
+        {
+            this.command = new CreateNewCourseCommand();
+        }
     };
 
     protected Command command;
@@ -93,6 +113,11 @@ public enum CommandResolver {
         commands.put("курсы", "COURSES");
         commands.put("купить_курс", "BUY_COURSE");
         commands.put("мои_курсы", "MY_COURSES");
+
+        //admin
+        commands.put("новое_задание", "NEW_TASK");
+        commands.put("подарить", "PAY_BONUSES");
+        commands.put("новый_курс", "NEW_COURSE");
     }
 
     public static HashMap<String, String> getAllCommands() {

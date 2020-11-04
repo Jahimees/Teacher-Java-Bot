@@ -10,6 +10,7 @@ import main.model.entity.BoughtCourse;
 import main.model.entity.Course;
 import main.model.entity.User;
 import main.vk.VKBotBean;
+import main.vk.command.core.ParametrizedCommand;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +34,8 @@ public class BuyCourseCommand implements ParametrizedCommand {
         params.put(1, message.getUserId());
         params.put(2, courseId);
 
-        BoughtCourseQueryExecutor queryExecutor = new BoughtCourseQueryExecutor();
-        queryExecutor.executeNonQuery(INSERT_BOUGHT_COURSE, params);
+        BoughtCourseQueryExecutor boughtCourseQueryExecutor = new BoughtCourseQueryExecutor();
+        boughtCourseQueryExecutor.executeNonQuery(INSERT_BOUGHT_COURSE, params);
 
         UserQueryExecutor userQueryExecutor = new UserQueryExecutor();
         User currentUser = userQueryExecutor.findUser(message.getUserId());
@@ -62,11 +63,11 @@ public class BuyCourseCommand implements ParametrizedCommand {
 
         List<BoughtCourse> boughtCourses = findBoughtCourses(currentUserId);
 
-        List<Integer> boughtCourseIds = boughtCourses.stream()
+        List<String> boughtCourseIds = boughtCourses.stream()
                 .map(BoughtCourse::getIdCourse)
                 .collect(Collectors.toList());
 
-        if (!boughtCourseIds.isEmpty() && boughtCourseIds.contains(Integer.parseInt(courses.get(0).getId()))) {
+        if (!boughtCourseIds.isEmpty() && boughtCourseIds.contains(courses.get(0).getId())) {
             return COURSE_ALREADY_BOUGHT;
         }
 

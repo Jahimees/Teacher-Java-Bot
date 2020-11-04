@@ -12,12 +12,12 @@
 --
 -- CREATE TABLE boughtCourses (
 --   id INT AUTO_INCREMENT PRIMARY KEY,
---   id_course INT NOT NULL,
+--   id_course VARCHAR(250) NOT NULL,
 --   id_user INT NOT NULL
 -- );
 --
 -- CREATE TABLE courses (
---   id VARCHAR(250) AUTO_INCREMENT PRIMARY KEY,
+--   id VARCHAR(250) PRIMARY KEY,
 --   link VARCHAR(250) NOT NULL,
 --   name VARCHAR(100) NOT NULL,
 --   cost INT NOT NULL

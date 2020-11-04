@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class BoughtCourse extends Entity {
-    private int idCourse;
+    private String idCourse;
     private int idUser;
 }

@@ -5,9 +5,9 @@ import com.vk.api.sdk.queries.messages.MessagesGetLongPollHistoryQuery;
 import lombok.SneakyThrows;
 import main.model.UserQueryExecutor;
 import main.model.entity.User;
-import main.vk.command.Command;
-import main.vk.command.CommandResolver;
-import main.vk.command.UnregisteredCommand;
+import main.vk.command.core.Command;
+import main.vk.command.core.CommandResolver;
+import main.vk.command.core.UnregisteredCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

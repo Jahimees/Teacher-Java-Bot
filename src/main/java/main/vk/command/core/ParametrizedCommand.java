@@ -1,4 +1,4 @@
-package main.vk.command;
+package main.vk.command.core;
 
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;

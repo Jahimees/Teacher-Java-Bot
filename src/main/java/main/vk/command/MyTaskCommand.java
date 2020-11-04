@@ -6,6 +6,7 @@ import com.vk.api.sdk.objects.messages.Message;
 import main.model.TaskQueryExecutor;
 import main.model.entity.Task;
 import main.vk.VKBotBean;
+import main.vk.command.core.Command;
 
 import java.util.HashMap;
 import java.util.List;

@@ -7,6 +7,7 @@ import main.model.TaskQueryExecutor;
 import main.model.entity.Task;
 import main.vk.PaginationUtils;
 import main.vk.VKBotBean;
+import main.vk.command.core.PaginableCommand;
 
 import java.util.List;
 

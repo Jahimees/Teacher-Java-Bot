@@ -1,4 +1,4 @@
-package main.vk.command;
+package main.vk.command.core;
 
 import main.vk.PaginationUtils;
 
