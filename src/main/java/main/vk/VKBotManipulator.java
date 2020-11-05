@@ -1,5 +1,6 @@
 package main.vk;
 
+import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.queries.messages.MessagesGetLongPollHistoryQuery;
 import lombok.SneakyThrows;
@@ -37,8 +38,9 @@ public class VKBotManipulator extends Thread {
      * Если Ts не менять на более новый, то API будет присылать старые данные.
      */
     @SneakyThrows
-    public void start() {
-        MessagesGetLongPollHistoryQuery query = vkBotBean.getVk().messages()
+    public Message goStart() throws ClientException {
+        MessagesGetLongPollHistoryQuery query = vkBotBean
+                .getVk().messages()
                 .getLongPollHistory(vkBotBean.getActor())
                 .ts(vkBotBean.getTs());
 
@@ -46,28 +48,49 @@ public class VKBotManipulator extends Thread {
         if (vkBotBean.getMaxMsgId() > 0) {
             query.maxMsgId(vkBotBean.getMaxMsgId());
         }
-        if (messageList.size() != 0) {
-            for (Message message : messageList) {
-                String commandName = message.getBody().split(" ")[0];
-                Command command = CommandResolver.resolveCommand(commandName);
-                if (command == null) {
-                    vkBotBean.getVk().messages().send(vkBotBean.getActor(), message.getUserId()).message(UNKNOWN_COMMAND_MESSAGE).execute();
-                } else if (command instanceof UnregisteredCommand) {
-                    command.execute(vkBotBean, message);
-                } else if (isUserRegistered(message)) {
-                    command.execute(vkBotBean, message);
-                } else {
-                    vkBotBean.getVk()
+        if (!messageList.isEmpty()) {
+            try {
+                for (Message message : messageList) {
+                    String commandName = message.getBody().split(" ")[0];
+                    Command command = CommandResolver.resolveCommand(commandName);
+                    if (command == null) {
+                        vkBotBean.getVk().messages().send(vkBotBean.getActor(), message.getUserId()).message(UNKNOWN_COMMAND_MESSAGE).execute();
+                    } else if (command instanceof UnregisteredCommand) {
+                        command.execute(vkBotBean, message);
+                    } else if (isUserRegistered(message)) {
+                        command.execute(vkBotBean, message);
+                    } else {
+                        vkBotBean.getVk()
+                                .messages()
+                                .send(vkBotBean.getActor(), message.getUserId())
+                                .message(NOT_REGISTERED)
+                                .execute();
+                    }
+
+                    vkBotBean.setTs(vkBotBean.getVk()
                             .messages()
-                            .send(vkBotBean.getActor(), message.getUserId())
-                            .message(NOT_REGISTERED)
-                            .execute();
+                            .getLongPollServer(vkBotBean.getActor())
+                            .execute()
+                            .getTs());
                 }
-
-                vkBotBean.setTs(vkBotBean.getVk().messages().getLongPollServer(vkBotBean.getActor()).execute().getTs());
+            } catch (ClientException e) {
+                e.printStackTrace();
             }
-
         }
+
+        if (!messageList.isEmpty() && !messageList.get(0).isOut()) {
+            /*
+            messageId - максимально полученный ID, нужен, чтобы не было ошибки 10 internal server error,
+            который является ограничением в API VK. В случае, если ts слишком старый (больше суток),
+            а max_msg_id не передан, метод может вернуть ошибку 10 (Internal server error).
+             */
+            int messageId = messageList.get(0).getId();
+            if (messageId > vkBotBean.getMaxMsgId()){
+                vkBotBean.setMaxMsgId(messageId);
+            }
+            return messageList.get(0);
+        }
+        return null;
     }
 
     private boolean isUserRegistered(Message message) {
@@ -78,18 +101,22 @@ public class VKBotManipulator extends Thread {
         return !userList.isEmpty();
     }
 
-    @Override
+    @SneakyThrows
     public void run() {
         if (isBotStart) {
             return;
         }
         isBotStart = true;
         while (true) {
+            Thread.sleep(300);
             try {
-                Thread.sleep(300);
-                start();
-            } catch (InterruptedException e) {
+                goStart();
+            } catch (ClientException e) {
+                System.out.println("Возникли проблемы");
+                final int RECONNECT_TIME = 10000;
+                System.out.println("Повторное соединение через " + RECONNECT_TIME / 1000 + " секунд");
                 e.printStackTrace();
+                Thread.sleep(RECONNECT_TIME);
             }
         }
     }
