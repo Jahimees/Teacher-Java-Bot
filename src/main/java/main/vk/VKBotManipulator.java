@@ -1,5 +1,6 @@
 package main.vk;
 
+import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.queries.messages.MessagesGetLongPollHistoryQuery;
@@ -29,6 +30,7 @@ public class VKBotManipulator extends Thread {
     @Autowired
     private VKBotBean vkBotBean;
     private boolean isBotStart = false;
+    private boolean isExceptionThrown = false;
 
     /**
      * Мониторит сообщения группы каждые 300 миллисекунд.
@@ -38,18 +40,18 @@ public class VKBotManipulator extends Thread {
      * Если Ts не менять на более новый, то API будет присылать старые данные.
      */
     @SneakyThrows
-    public Message goStart() throws ClientException {
+    public Message goStart() throws ClientException, ApiException {
         MessagesGetLongPollHistoryQuery query = vkBotBean
                 .getVk().messages()
                 .getLongPollHistory(vkBotBean.getActor())
                 .ts(vkBotBean.getTs());
+        try {
 
-        List<Message> messageList = query.execute().getMessages().getMessages();
-        if (vkBotBean.getMaxMsgId() > 0) {
-            query.maxMsgId(vkBotBean.getMaxMsgId());
-        }
-        if (!messageList.isEmpty()) {
-            try {
+            List<Message> messageList = query.execute().getMessages().getMessages();
+            if (vkBotBean.getMaxMsgId() > 0) {
+                query.maxMsgId(vkBotBean.getMaxMsgId());
+            }
+            if (!messageList.isEmpty()) {
                 for (Message message : messageList) {
                     String commandName = message.getBody().split(" ")[0];
                     Command command = CommandResolver.resolveCommand(commandName);
@@ -73,22 +75,25 @@ public class VKBotManipulator extends Thread {
                             .execute()
                             .getTs());
                 }
-            } catch (ClientException e) {
-                e.printStackTrace();
-            }
-        }
 
-        if (!messageList.isEmpty() && !messageList.get(0).isOut()) {
+            }
+
+            if (!messageList.isEmpty() && !messageList.get(0).isOut()) {
             /*
             messageId - максимально полученный ID, нужен, чтобы не было ошибки 10 internal server error,
             который является ограничением в API VK. В случае, если ts слишком старый (больше суток),
             а max_msg_id не передан, метод может вернуть ошибку 10 (Internal server error).
              */
-            int messageId = messageList.get(0).getId();
-            if (messageId > vkBotBean.getMaxMsgId()){
-                vkBotBean.setMaxMsgId(messageId);
+                int messageId = messageList.get(0).getId();
+                if (messageId > vkBotBean.getMaxMsgId()) {
+                    vkBotBean.setMaxMsgId(messageId);
+                }
+                return messageList.get(0);
             }
-            return messageList.get(0);
+        } catch (ApiException | ClientException e) {
+            isExceptionThrown = true;
+            e.printStackTrace();
+            throw new Exception(e);
         }
         return null;
     }
@@ -108,14 +113,19 @@ public class VKBotManipulator extends Thread {
         }
         isBotStart = true;
         while (true) {
+            if (isExceptionThrown) {
+                vkBotBean.reconnect();
+                isExceptionThrown = false;
+            }
             Thread.sleep(300);
             try {
                 goStart();
-            } catch (ClientException e) {
+            } catch (Exception e) {
                 System.out.println("Возникли проблемы");
                 final int RECONNECT_TIME = 10000;
                 System.out.println("Повторное соединение через " + RECONNECT_TIME / 1000 + " секунд");
                 e.printStackTrace();
+                isExceptionThrown = true;
                 Thread.sleep(RECONNECT_TIME);
             }
         }

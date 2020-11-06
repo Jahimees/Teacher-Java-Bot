@@ -38,4 +38,13 @@ public class VKBotBean {
         actor = new GroupActor(vkGroupConfiguration.getGroupId(), vkGroupConfiguration.getAccessToken());
         ts = vk.messages().getLongPollServer(actor).execute().getTs();
     }
+
+    public void reconnect() throws ClientException, ApiException {
+
+        TransportClient transportClient = HttpTransportClient.getInstance();
+        vk = new VkApiClient(transportClient);
+        actor = new GroupActor(vkGroupConfiguration.getGroupId(), vkGroupConfiguration.getAccessToken());
+        ts = vk.messages().getLongPollServer(actor).execute().getTs();
+        maxMsgId = -1;
+    }
 }
